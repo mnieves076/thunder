@@ -1,5 +1,3 @@
-// *    Created by Michael Nieves (magnamerc@yahoo.com)
-
 var Thunder = {};
 Thunder.VERSION = "1.0.9";
 Thunder.DEBUG = false;
