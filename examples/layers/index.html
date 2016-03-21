@@ -1,0 +1,93 @@
+<html>
+  <head>
+    <title>Thunder: Layers</title>
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">  
+  </head>
+  <body style="margin-top:0px; margin-left:0px;">
+  	<div style="position:relative;">
+    	<div id="root"></div>
+    </div>    
+  </body>
+</html>
+
+<script src="../../../jquery-1.12.2.min.js"></script>
+<script src="../../thunder-1.0.9.js"></script>
+
+<script>
+Thunder.DEBUG = true;
+
+$(document).ready(function () {
+  var App = new Application($("#root"));
+});
+
+var Application = Thunder.Component.extend({			
+	init: function(initRootElement) {
+		this._super(initRootElement);		
+		this.layerIndex = 2;
+		
+		//Initialize assets
+		this.assetManager.addAsset("gui-1","block",null,"block-1",10,10,320,30,{"text":"Layer /gui/1"});
+		this.assetManager.addAsset("gui-2","block",null,"block-2",10,10,320,30,{"text":"Layer /gui/2"});
+		this.assetManager.addAsset("gui-3","block",null,"block-3",10,10,320,30,{"text":"Layer /gui/3"});
+		this.assetManager.addAsset("box-1","box",null,"block-1",0,0,640,480,{"backgroundColor":"#CE0000"});
+		this.assetManager.addAsset("box-2","box",null,"block-2",0,0,640,480,{"backgroundColor":"#00CE00"});
+		this.assetManager.addAsset("box-3","box",null,"block-3",0,0,640,480,{"backgroundColor":"#0000CE"});
+		this.assetManager.addAsset("movable","box",null,"movable",0,0,72,72,{"backgroundColor":"#CCCCCC"});
+		
+		//Initialize layers
+		this.layerManager.addLayer("/gui/1/bg");
+		this.layerManager.addLayer("/gui/2/bg");
+		this.layerManager.addLayer("/gui/3/bg");
+		this.layerManager.addLayer("/gui/1");
+		this.layerManager.addLayer("/gui/2");
+		this.layerManager.addLayer("/gui/3");
+						
+		//start
+		this.drawMainInterface();
+	},
+	
+	drawMainInterface: function() {
+		var t = this;
+		
+		this.addResponder("MOVE_TO_LAYER", function(event) {
+			t.trace(event.name);
+			t.layerManager.moveToLayer("/gui/" + (t.layerIndex++),t.assetManager.getAsset("movable").container,true);
+			t.eventQueue.addEvent("MOVE_TO_LAYER",3000);
+			
+			if(t.layerIndex > 3) {
+				t.layerIndex = 1;
+			}
+		});
+		
+		this.addCustomizer("block",function(asset) {
+			asset.container.html((typeof asset.param.text != "undefined") ? asset.param.text : "").css({"color":"#FFFFFF"});
+		});
+		
+		this.addCustomizer("box",function(asset) {
+			var newBox = $('<div>', {
+				"id": asset.tag,
+				"css": {
+					"background-color": (typeof asset.param != "undefined" && typeof asset.param.backgroundColor != "undefined") ? asset.param.backgroundColor : "none",
+					"width": asset.width + "px",
+					"height": asset.height + "px"
+				}
+			});
+			
+			newBox.appendTo(asset.container);
+		});
+		
+		this.layerManager.layOut(this.assetManager.getAssets("box-1","box"),"/gui/1/bg");
+		this.layerManager.layOut(this.assetManager.getAssets("box-2","box"),"/gui/2/bg");
+		this.layerManager.layOut(this.assetManager.getAssets("box-3","box"),"/gui/3/bg");
+		
+		this.layerManager.addToLayOut(this.assetManager.getAssets("gui-1|movable","block|box"),"/gui/1");
+		this.layerManager.addToLayOut(this.assetManager.getAssets("gui-2","block"),"/gui/2");
+		this.layerManager.addToLayOut(this.assetManager.getAssets("gui-3","block"),"/gui/3");
+		
+		this.layerManager.moveLayerSet("/gui/2", new Thunder.Point(100,100));
+		this.layerManager.moveLayerSet("/gui/3", new Thunder.Point(200,200));
+		
+		this.eventQueue.addEvent("MOVE_TO_LAYER",3000);
+	}
+});
+</script>

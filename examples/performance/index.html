@@ -1,0 +1,108 @@
+<html>
+  <head>
+    <title>Thunder: Performance</title>
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">  
+  </head>
+  <body style="margin-top:0px; margin-left:0px;">
+  	<div style="position:relative;">
+    	<div id="root"></div>
+    </div>    
+  </body>
+</html>
+
+<script src="../../../jquery-1.12.2.min.js"></script>
+<script src="../../thunder-1.0.9.js"></script>
+
+<script>
+$(document).ready(function() {
+	var App = new Application($("#root"));
+});
+
+var Application = Thunder.Component.extend({
+	init: function(initRootElement) {
+		this._super(initRootElement);
+		this.createAssets();
+		this.colors = ["#FF9999","#FFE599","#CCFF99","#99FFE5","#99CCFF","#EFBFFF","#CACAD9"];
+		
+		var startTime = (new Date()).getTime();
+		
+		this.layerManager.addLayer("/BG");
+		this.drawMainInterface();
+		
+		var endTime = (new Date()).getTime();
+		var completionSecs = (endTime - startTime) / 1000;
+		
+		console.log("Completed draw in " + completionSecs + " secs.");
+	},
+	
+	drawMainInterface: function() {
+		this.addCustomizer("box", function(asset) {
+			asset.container.css({
+				"background-color": this.colors[Math.floor(Math.random() * this.colors.length)]
+			});
+		});
+		
+		this.layerManager.layOut(this.assetManager.getAssets("gui-0","box"),"/BG");
+	},
+	
+	createAssets: function() {
+		var x = 0;
+		var y = 0;
+		var column = 0;
+		
+		//create 10000 assets
+		for(var i = 0; i < 10; i++) {
+			for(var ii = 0; ii < 1000; ii++) {
+				this.assetManager.addAsset("gui-" + i,"box",null,"OPT-" + i + "-" + ii,x,y,36,36);
+				
+				if(column < 30) {
+					x += 36;
+					column++;
+				} else {
+					column = 0;
+					x = 0;
+					y += 36;
+				}
+			}
+		}
+		
+		var startTime = (new Date()).getTime();
+		
+		//get different assets using getAsset
+		this.assetManager.getAsset("OPT-0-25");
+		this.assetManager.getAsset("OPT-1-50");
+		this.assetManager.getAsset("OPT-2-75");
+		this.assetManager.getAsset("OPT-2-100");
+		this.assetManager.getAsset("OPT-3-150");
+		this.assetManager.getAsset("OPT-3-250");
+		this.assetManager.getAsset("OPT-4-350");
+		this.assetManager.getAsset("OPT-5-750");
+		this.assetManager.getAsset("OPT-6-999");
+		this.assetManager.getAsset("OPT-7-888");
+		this.assetManager.getAsset("OPT-8-777");
+		this.assetManager.getAsset("OPT-9-55");
+		
+		//get assets using getAssets
+		this.assetManager.getAssets("gui-2|gui-4");
+		this.assetManager.getAssets("gui-1|gui-5","box");
+		
+		//remove assets
+		this.assetManager.removeAsset("OPT-0-25");
+		this.assetManager.removeAsset("OPT-1-50");
+		this.assetManager.removeAsset("OPT-2-75");
+		this.assetManager.removeAsset("OPT-2-100");
+		this.assetManager.removeAsset("OPT-3-150");
+		this.assetManager.removeAsset("gui-4");
+		this.assetManager.removeAsset("gui-7","box");
+		
+		//get all assets
+		var assets = this.assetManager.getAssets("gui-0|gui-1|gui-2|gui-3|gui-4|gui-5|gui-6|gui-7|gui-8|gui-9");
+		
+		var endTime = (new Date()).getTime();
+		var completionSecs = (endTime - startTime) / 1000;
+		
+		console.log(assets.length + " assets found.");
+		console.log("Completed lookups in " + completionSecs + " secs.");
+	}
+});
+</script>

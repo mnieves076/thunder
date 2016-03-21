@@ -1,0 +1,63 @@
+<html>
+  <head>
+    <title>Thunder: Scrollbar</title>
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">  
+  </head>
+  <body style="margin-top:0px; margin-left:0px;">
+  	<div id="root" style="width: 320px; height: 416px; position:absolute; top:0px; left:0px;"></div>
+  </body>
+</html>
+
+<script src="../../../jquery-1.12.2.min.js"></script>
+<script src="../../thunder-1.0.9.js"></script>
+<script src="../../gui/scrollbar.js"></script>
+
+<script>
+Thunder.DEBUG = true;
+
+$(document).ready(function () {
+  var App = new Application($("#root"));
+});
+
+var Application = Thunder.Component.extend({	
+	init: function(initRootElement) {
+		this._super(initRootElement);
+				
+		//Initialize assets
+		this.assetManager.addAsset("gui","vScrollbar",null,"VSCROLLBAR",10,26,16,200);
+		this.assetManager.addAsset("gui","hScrollbar",null,"HSCROLLBAR",26,10,200,16);
+		
+		//Initialize layers
+		this.layerManager = new Thunder.LayerManager(this.container,this.handleCustomization,this);
+		this.layerManager.addLayer("/GUI");
+				
+		//start
+		this.drawMainInterface();
+	},
+	
+	drawMainInterface: function() {
+		var t = this;
+		
+		this.addCustomizer("vScrollbar", function(asset) {
+			asset.param = new Thunder.Scrollbar(asset.container,asset.tag,null,asset.width,asset.height);
+			asset.param.setMax(100);
+			asset.param.addListener(t.eventQueue);
+			asset.param.setValue(0);
+		});
+		
+		this.addCustomizer("hScrollbar", function(asset) {
+			asset.param = new Thunder.Scrollbar(asset.container,asset.tag,null,asset.width,asset.height,true);
+			asset.param.setMax(100);
+			asset.param.addListener(t.eventQueue);
+			asset.param.setValue(0);
+		});
+		
+		this.addResponder("SCROLL_UPDATE", function(event) {
+			t.trace("APP EVENT: " + event.name);
+			t.trace(event.owner.name + ": " + event.owner.getValue());
+		});
+		
+		this.layerManager.layOut(this.assetManager.getAssets("gui"),"GUI",0);
+	}
+});
+</script>
