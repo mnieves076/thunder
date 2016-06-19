@@ -3,11 +3,11 @@ A framework for applications built on top of jQuery.
 
 ## Getting started
 
-Thunder requires jquery-1.x.
+Thunder requires jquery (any version).
 
 ```html
-<script src="jquery-1.12.2.min.js"></script>
-<script src="thunder-1.0.9.js"></script>
+<script src="jquery-3.0.0.min.js"></script>
+<script src="thunder-1.1.0.js"></script>
 ```
 
 ## Hello World!
