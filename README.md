@@ -53,7 +53,7 @@ let Application = Thunder.Component.extend({
 	
 	drawMainInterface: function() {
 		this.addCustomizer("html",function(asset) {
-			asset.container.html("<div>Hello World!</div>");
+			asset.container.innerHTML = "<div>Hello World!</div>";
 		});
 		
 		this.layerManager.layOut(this.assetManager.getAssets("gui","html"),"/BG");
