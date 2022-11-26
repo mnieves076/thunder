@@ -1,25 +1,20 @@
 <html>
   <head>
     <title>Thunder: Scrollbar</title>
-    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">  
   </head>
   <body style="margin-top:0px; margin-left:0px;">
   	<div id="root" style="width: 320px; height: 416px; position:absolute; top:0px; left:0px;"></div>
   </body>
 </html>
 
-<script src="../../../../jquery-3.0.0-rc1.min.js"></script>
-<script src="../../thunder-1.1.0.js"></script>
+<script src="../../thunder-1.2.0.js"></script>
 <script src="../../gui/scrollbar.js"></script>
 
 <script>
 Thunder.DEBUG = true;
 
-$(document).ready(function () {
-  var App = new Application($("#root"));
-});
-
-var Application = Thunder.Component.extend({	
+let Application = Thunder.Component.extend({	
 	init: function(initRootElement) {
 		this._super(initRootElement);
 				
@@ -60,4 +55,6 @@ var Application = Thunder.Component.extend({
 		this.layerManager.layOut(this.assetManager.getAssets("gui"),"GUI",0);
 	}
 });
+
+let App = new Application(document.getElementById("root"));
 </script>

@@ -1,7 +1,7 @@
 <html>
   <head>
     <title>Thunder: Performance</title>
-    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">  
   </head>
   <body style="margin-top:0px; margin-left:0px;">
   	<div style="position:relative;">
@@ -10,14 +10,9 @@
   </body>
 </html>
 
-<script src="../../../../jquery-3.0.0-rc1.min.js"></script>
-<script src="../../thunder-1.1.0.js"></script>
+<script src="../../thunder-1.2.0.js"></script>
 
 <script>
-$(document).ready(function() {
-	var App = new Application($("#root"));
-});
-
 var Application = Thunder.Component.extend({
 	init: function(initRootElement) {
 		this._super(initRootElement);
@@ -37,9 +32,7 @@ var Application = Thunder.Component.extend({
 	
 	drawMainInterface: function() {
 		this.addCustomizer("box", function(asset) {
-			asset.container.css({
-				"background-color": this.colors[Math.floor(Math.random() * this.colors.length)]
-			});
+			asset.container.style.backgroundColor = this.colors[Math.floor(Math.random() * this.colors.length)];
 		});
 		
 		this.layerManager.layOut(this.assetManager.getAssets("gui-0","box"),"/BG");
@@ -105,4 +98,6 @@ var Application = Thunder.Component.extend({
 		console.log("Completed lookups in " + completionSecs + " secs.");
 	}
 });
+
+let App = new Application(document.getElementById("root"));
 </script>

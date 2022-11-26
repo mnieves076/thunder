@@ -1,11 +1,11 @@
 <html>
   <head>
     <title>Thunder: Tic Tac Toe</title>
-    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">  
   </head>
   <body style="margin-top:0px; margin-left:0px;">
   	<div style="position:relative;">
-    	<div id="root" style="width: 320px; height: 416px; position:absolute; top:0px, left:0px;"></div>
+    	<div id="root" style="width: 320px; height: 416px; position:absolute; top:0px; left:0px;"></div>
     </div>    
     <div id="preloader" style="display: none">
     	<img src="clouds.jpg"/>
@@ -16,19 +16,12 @@
   </body>
 </html>
 
-<script src="../../../../jquery-3.0.0-rc1.min.js"></script>
-<script src="../../thunder-1.1.0.js"></script>
+<script src="../../thunder-1.2.0.js"></script>
 
 <script>
 Thunder.DEBUG = true;
-var App;
-  
-$(document).ready(function () {
-  App = new Application($("#root"));
-});
 
-
-var Application = Thunder.Component.extend({			
+let Application = Thunder.Component.extend({			
 	init: function(initRootElement) {
 		this._super(initRootElement);
 			
@@ -56,7 +49,7 @@ var Application = Thunder.Component.extend({
 		this.layerManager.addLayer("/BOARD");
 				
 		//Map key controls
-		this.keyEventMap = new Thunder.KeyEventMap($(document),this.eventQueue);
+		this.keyEventMap = new Thunder.KeyEventMap(document,this.eventQueue);
 			
 		//start
 		this.drawMainInterface();
@@ -66,11 +59,11 @@ var Application = Thunder.Component.extend({
 		var t = this;
 		
 		this.addCustomizer("img", function(asset) {
-			asset.container.html("<img src='" + asset.src + "'>");
+			asset.container.innerHTML = "<img src='" + asset.src + "'>";
 		});
 		
 		this.addCustomizer("btn", function(asset) {
-			asset.container.html("<img class='empty' src='" + asset.src + "' style='cursor:hand;cursor:pointer'>");
+			asset.container.innerHTML = "<img class='empty' src='" + asset.src + "' style='cursor:hand;cursor:pointer'>";
 			asset.mapEvents(t.eventQueue);
 		});
 		
@@ -80,7 +73,7 @@ var Application = Thunder.Component.extend({
 			switch(event.owner.type) {
 				case "btn":
 					event.owner.unMapEvents();
-					event.owner.container.html("<img src='x.png'>");
+					event.owner.container.innerHTML = "<img src='x.png'>";
 					t.gameBoard[event.owner.param] = t.PLAYER;
 					
 					if(t.handleVictory(t.checkVictory())) {
@@ -105,7 +98,7 @@ var Application = Thunder.Component.extend({
 			t.gameBoard[p] = t.PLAYER;
 			
 			var asset = t.assetManager.getAsset("BTN_" + p);
-			asset.container.html("<img src='x.png'>");
+			asset.container.innerHTML = "<img src='x.png'>";
 			
 			if(t.handleVictory(t.checkVictory())) {
 				t.reset(); 
@@ -155,7 +148,7 @@ var Application = Thunder.Component.extend({
 		}
 		
 		var asset = this.assetManager.getAsset("BTN_" + selectedPosition);
-		asset.container.html("<img src='o.png'/>");
+		asset.container.innerHTML = "<img src='o.png'/>";
 		asset.unMapEvents();
 		this.gameBoard[selectedPosition] = this.COMPUTER;
 		
@@ -242,4 +235,6 @@ var Application = Thunder.Component.extend({
 		return true;
 	}
 });
+
+let App = new Application(document.getElementById("root"));
 </script>

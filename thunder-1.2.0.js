@@ -1,16 +1,16 @@
-var Thunder = {};
-Thunder.VERSION = "1.0.9";
+let Thunder = {};
+Thunder.VERSION = "1.2.0";
 Thunder.DEBUG = false;
 Thunder.ID = 0; //Global used for instance names
 Thunder.VERTICAL = 0;
 Thunder.HORIZONTAL = 1;
 
 //get Thunder's root directory
-var scripts = document.getElementsByTagName("script");
-var i = scripts.length;
+let scripts = document.getElementsByTagName("script");
+let i = scripts.length;
 
 while(i--){
-	var match = scripts[i].src.match(/(^|.*\/)thunder-(.*)\.js$/);
+	let match = scripts[i].src.match(/(^|.*\/)thunder-(.*)\.js$/);
 	if(match){ Thunder.ROOT = match[1]; } 
 }
 
@@ -23,29 +23,29 @@ while(i--){
 
 
 (function(){
-	var initializing = false, fnTest = /xyz/.test(function(){xyz;}) ? /\b_super\b/ : /.*/;
+	let initializing = false, fnTest = /xyz/.test(function(){xyz;}) ? /\b_super\b/ : /.*/;
 
 	// The base implementation does nothing
 	this.BaseObject = function(){};
 	
 	// Create a new BaseObject that inherits from this class
 	BaseObject.extend = function(prop) {
-		var _super = this.prototype;
+		let _super = this.prototype;
 		
 		// Instantiate a base class (but only create the instance,
 		// don't run the init constructor)
 		initializing = true;
-		var prototype = new this();
+		let prototype = new this();
 		initializing = false;
 		
 		// Copy the properties over onto the new prototype
-		for (var name in prop) {
+		for (let name in prop) {
 		  // Check if we're overwriting an existing function
 		  prototype[name] = typeof prop[name] === "function" &&
 			typeof _super[name] === "function" && fnTest.test(prop[name]) ?
 			(function(name, fn){
 			  return function() {
-				var tmp = this._super;
+				let tmp = this._super;
 			   
 				// Add a new ._super() method that is the same method
 				// but on the super-class
@@ -53,7 +53,7 @@ while(i--){
 			   
 				// The method only need to be bound temporarily, so we
 				// remove it when we're done executing
-				var ret = fn.apply(this, arguments);       
+				let ret = fn.apply(this, arguments);       
 				this._super = tmp;
 			   
 				return ret;
@@ -96,8 +96,8 @@ while(i--){
 		},
 		
 		handleEvents: function(events) { 
-			for(var i = 0, ii = events.length; i < ii; i++) {			
-				var responder = this.responders[events[i].name];
+			for(let i = 0, ii = events.length; i < ii; i++) {			
+				let responder = this.responders[events[i].name];
 				
 				if(typeof responder != "undefined") {
 					responder.apply(this,[events[i]]);
@@ -110,7 +110,7 @@ while(i--){
 		},		
 		
 		removeListener: function(evtQue) {
-			for(var i = 0, ii = this.listeners.length; i < ii; i++) {
+			for(let i = 0, ii = this.listeners.length; i < ii; i++) {
 				if(this.listeners[i] === evtQue) {
 					this.listeners.splice(i,1);
 					return true;
@@ -121,7 +121,7 @@ while(i--){
 		},		
 		
 		removeListeners: function() {
-			for(var i = 0, ii = this.listeners.length; i < ii; i++) {
+			for(let i = 0, ii = this.listeners.length; i < ii; i++) {
 				this.listeners[i] = null;
 			}
 			
@@ -145,7 +145,7 @@ while(i--){
 				delayMSecs = 0;
 			}
 			
-			for(var i = 0, ii = this.listeners.length; i < ii; i++) {
+			for(let i = 0, ii = this.listeners.length; i < ii; i++) {
 				this.listeners[i].addEvent(evtName,delayMSecs,this,evtObj);
 			}
 		},
@@ -155,7 +155,7 @@ while(i--){
 				delayMSecs = 0;
 			}
 			
-			for(var i = 0, ii = this.listeners.length; i < ii; i++) {
+			for(let i = 0, ii = this.listeners.length; i < ii; i++) {
 				this.listeners[i].addUniqueEvent(evtName,delayMSecs,this,evtObj);
 			}
 		},
@@ -186,9 +186,9 @@ while(i--){
 		
 		move: function(xOffset,yOffset) {
 			if(this.container !== null) {
-				var p = this.container.position();	
-				this.container.css("top",p.top + yOffset);	
-				this.container.css("left",p.left + xOffset);	
+				let p = this.container.getBoundingClientRect();	
+				this.container.style.top = p.top + yOffset + "px";	
+				this.container.style.left = p.left + xOffset + "px";	
 			}
 			
 			this.position.addValues(xOffset,yOffset);
@@ -196,19 +196,14 @@ while(i--){
 		
 		setPosition: function(newX,newY) {
 			if(this.container !== null) {
-				this.container.css("top",newY);	
-				this.container.css("left",newX);	
+				this.container.style.top = newY + "px";	
+				this.container.style.left = newX + "px";	
 			}
 			
 			this.position.setValues(newX,newY);
 		},
 		
 		getPosition: function() {
-			if(this.container !== null) {
-				var p = this.container.position();	
-				this.position.setValues(p.left,p.top);
-			}
-			
 			return this.position;
 		},	
 		
@@ -218,7 +213,7 @@ while(i--){
 		
 		setX: function(newX) {
 			if(this.container !== null)
-				this.container.css({left:newX});
+				this.container.style.left = newX;
 				
 			this.position.x = newX;
 		},
@@ -229,7 +224,7 @@ while(i--){
 		
 		setY: function(newY) {
 			if(this.container !== null)
-				this.container.css({top:newY});
+				this.container.style.top = newY;
 				
 			this.position.y = newY
 		},
@@ -239,9 +234,9 @@ while(i--){
 			
 			if(this.container !== null) {
 				if(this.isVisible) {			
-					this.container.css("display","");
+					this.container.style.display = "";
 				} else {
-					this.container.css("display","none");
+					this.container.style.display = "none";
 				}
 			}
 		},
@@ -253,7 +248,7 @@ while(i--){
 		setWidth: function(newWidth) {
 			if(!isNaN(newWidth)) {
 				if(this.container !== null) {
-					this.container.width(newWidth);					
+					this.container.style.width = newWidth + "px";					
 				}
 				
 				this.width = newWidth;
@@ -267,7 +262,7 @@ while(i--){
 		setHeight: function(newHeight) {
 			if(!isNaN(newHeight)) {
 				if(this.container !== null) {
-					this.container.height(newHeight);					
+					this.container.style.height = newHeight + "px";					
 				}
 				
 				this.height = newHeight;
@@ -281,14 +276,16 @@ while(i--){
 		setMask: function(top,right,bottom,left) {
 			if(this.container !== null) {
 				if(!isNaN(top) && !isNaN(right) && !isNaN(bottom) && !isNaN(left)) {
-					this.container.css("clip","rect(" + top + "px," + right + "px," + bottom + "px," + left + "px)");
+					this.container.style.width = right + "px";
+                    this.container.style.height = bottom + "px";
+                    this.container.style.overflow = 'hidden';
 				}
 			}
 		},
 		
 		setAlpha: function(newValue) {
 			if(this.container !== null) {
-				this.container.css("opacity",newValue);
+				this.container.style.opacity = newValue;
 			}
 			
 			this.alpha = newValue;
@@ -307,13 +304,15 @@ while(i--){
 		},
 		
 		rotate: function(degree) {
-			this.container.css("rotate",degree + "deg");
-			this.container.css("-webkit-transform","rotate(" + degree + "deg)");
-			this.container.css("-moz-transform","rotate(" + degree + "deg)");
+			this.container.style.transform = "rotate(" + degree + "deg)";
+			this.container.style.webkitTransform = "rotate(" + degree + "deg)";
+			this.container.style.mozTransform = "rotate(" + degree + "deg)";
+			this.container.style.oTransform = "rotate(" + degree + "deg)";
+			this.container.style.msTransform = "rotate(" + degree + "deg)";
 		},
 		
 		setZIndex: function(newZIndex) {
-			this.container.css("z-index",newZIndex);	
+			this.container.style.zIndex = newZIndex;	
 		},
 		
 		mapEvents: function(eventQueue) {
@@ -350,13 +349,13 @@ while(i--){
 		init: function(initRootElement) {
 			this._super(initRootElement);		
 			this.customizers = {};
-			this.assetManager = new Thunder.AssetManager();
+            this.assetManager = new Thunder.AssetManager();
 			this.layerManager = new Thunder.LayerManager(this.container,this.handleCustomization,this);			
 		},
 		
 		handleCustomization: function(assetList) {
-			for(var i = 0, ii = assetList.length; i < ii; i++) {			
-				var customizer = this.customizers[assetList[i].type];
+			for(let i = 0, ii = assetList.length; i < ii; i++) {			
+				let customizer = this.customizers[assetList[i].type];
 				
 				if(typeof customizer != "undefined") {
 					customizer.apply(this,[assetList[i]]);
@@ -398,15 +397,17 @@ while(i--){
 		},
 		
 		getLocalEventPosition: function() {
-			var t = this.eventObject;
+			let t = this.eventObject;
 			
-			if(typeof this.eventObject.originalEvent.touches != "undefined" 
-			|| typeof this.eventObject.originalEvent.changedTouches != "undefined") {
-				t = this.eventObject.originalEvent.touches[0] || this.eventObject.originalEvent.changedTouches[0];
+			if(typeof this.eventObject.touches != "undefined" 
+			|| typeof this.eventObject.changedTouches != "undefined") {
+				t = this.eventObject.touches[0] || this.eventObject.changedTouches[0];
 			}
 			
-			var x = t.pageX - this.owner.container.offset().left;
-			var y = t.pageY - this.owner.container.offset().top;
+			let b = this.owner.container.getBoundingClientRect();
+            let x = t.pageX - b.left;
+            let y = t.pageY - b.top;
+
 			return new Thunder.Point(x,y);
 		}
 	};
@@ -425,43 +426,54 @@ while(i--){
 		this.mapEvents();
 		
 		if(!Thunder.DEBUG) {
-			$(document).on("contextmenu",function(e){ return false; }); 
+			document.addEventListener('contextmenu', event => event.preventDefault());
 		}
 	};
 	
 	Thunder.EventMap.prototype = {
 		mapEvents: function() {
-			var t = this;
-			this.container.on('mouseup',function(event) { t.eventQueue.addEvent("MOUSEUP",0,t.owner,event); return false;});
-			this.container.on('mousedown',function(event) { t.eventQueue.addEvent("MOUSEDOWN",0,t.owner,event); return false;});
-			this.container.on('mouseenter',function(event) { t.eventQueue.addEvent("MOUSEENTER",0,t.owner,event); return false;});
-			this.container.on('mouseleave',function(event) { t.eventQueue.addEvent("MOUSELEAVE",0,t.owner,event); return false;});
-			this.container.on('dblclick',function(event) { t.eventQueue.addEvent("DOUBLECLICK",0,t.owner,event); return false;});	
-			this.container.on('touchstart',function(event) { event.preventDefault(); t.eventQueue.addEvent("MOUSEDOWN",0,t.owner,event); return false;});
-			this.container.on('touchend',function(event) { event.preventDefault(); t.eventQueue.addEvent("MOUSEUP",0,t.owner,event); return false;});
-			this.container.on('tap',function(event) { event.preventDefault(); t.eventQueue.addEvent("MOUSEUP",0,t.owner,event); return false;});
+			let t = this;
+
+            t.mouseupListener = function(event) { t.eventQueue.addEvent("MOUSEUP",0,t.owner,event); return false;};
+            t.mousedownListener = function(event) { t.eventQueue.addEvent("MOUSEDOWN",0,t.owner,event); return false;};
+            t.mouseenterListener = function(event) { t.eventQueue.addEvent("MOUSEENTER",0,t.owner,event); return false;};
+            t.mouseleaveListener = function(event) { t.eventQueue.addEvent("MOUSELEAVE",0,t.owner,event); return false;};
+            t.dblclickListener = function(event) { t.eventQueue.addEvent("DOUBLECLICK",0,t.owner,event); return false;};
+            t.touchstartListener = function(event) { event.preventDefault(); t.eventQueue.addEvent("MOUSEDOWN",0,t.owner,event); return false;};
+            t.touchendListener = function(event) { event.preventDefault(); t.eventQueue.addEvent("MOUSEUP",0,t.owner,event); return false;};
+            t.tapListener = function(event) { event.preventDefault(); t.eventQueue.addEvent("MOUSEUP",0,t.owner,event); return false;};
+			this.container.addEventListener('mouseup',t.mouseupListener);
+			this.container.addEventListener('mousedown',t.mousedownListener);
+			this.container.addEventListener('mouseenter',t.mouseenterListener);
+			this.container.addEventListener('mouseleave',t.mouseleaveListener);
+			this.container.addEventListener('dblclick',t.dblclickListener);	
+			this.container.addEventListener('touchstart',t.touchstartListener);
+			this.container.addEventListener('touchend',t.touchendListener);
+			this.container.addEventListener('tap',t.tapListener);
 		},
 		
 		unMapEvents: function() {
-			this.container.off('mouseup');
-			this.container.off('mousedown');
-			this.container.off('mouseenter');
-			this.container.off('mouseleave');
-			this.container.off('dblclick');
-			this.container.off('touchstart');
-			this.container.off('touchend');
-			this.container.off('tap');
+			this.container.removeEventListener('mouseup',this.mouseupListener);
+			this.container.removeEventListener('mousedown',this.mousedownListener);
+			this.container.removeEventListener('mouseenter',this.mouseenterListener);
+			this.container.removeEventListener('mouseleave',this.mouseleaveListener);
+			this.container.removeEventListener('dblclick',this.dblclickListener);	
+			this.container.removeEventListener('touchstart',this.touchstartListener);
+			this.container.removeEventListener('touchend',this.touchendListener);
+			this.container.removeEventListener('tap',this.tapListener);
 		},
 		
 		mapMouseMoveEvent: function() {
-			var t = this;
-			this.container.on('mousemove',function(event) { t.eventQueue.addUniqueEvent("MOUSEMOVE",10,t.owner,event); return false; });	
-			this.container.on('touchmove',function(event) { event.preventDefault(); t.eventQueue.addUniqueEvent("MOUSEMOVE",10,t.owner,event); return false; });	
+			let t = this;
+            t.mousemoveListener = function(event) { t.eventQueue.addUniqueEvent("MOUSEMOVE",10,t.owner,event); return false; };
+            t.touchmoveListener = function(event) { event.preventDefault(); t.eventQueue.addUniqueEvent("MOUSEMOVE",10,t.owner,event); return false; };
+			this.container.addEventListener('mousemove',t.mousemoveListener);	
+			this.container.addEventListener('touchmove',t.touchmoveListener);	
 		},
 		
 		unMapMouseMoveEvent: function() {
-			this.container.off('mousemove');	
-			this.container.off('touchmove');	
+			this.container.removeEventListener('mousemove',this.mousemoveListener);	
+			this.container.removeEventListener('touchmove',this.touchmoveListener);	
 		}
 	};
 })();
@@ -482,23 +494,25 @@ while(i--){
 	
 	Thunder.KeyEventMap.prototype = {
 		mapKeyEvents: function() {
-			var t = this;
-						
-			this.container.keypress(function(event) {			
+			let t = this;
+			
+            t.keyPressListener = function(event) {			
 				if (event.keyCode) { 
-					var k = event.keyCode; 
+					let k = event.keyCode; 
 				} else if(event.which) {
-					var k = event.which;
+					let k = event.which;
 				} else {
 					return;
 				}
 				
-				t.onKeyDown(k);
-			});
+				t.addEventListenerKeyDown(k);
+			};
+
+			this.container.addEventListener("keypress",t.keyPressListener);
 		},		
 		
 		unMapKeyEvents: function() {		
-			this.container.off('keypress');
+			this.container.removeEventListener('keypress',this.keyPressListener);
 		},	
 	
 		mapKey: function(keyCode, eventName) {
@@ -506,7 +520,7 @@ while(i--){
 		},		
 		
 		onKeyDown: function(keyCode) {
-			var evtName = this.keyMap[keyCode];
+			let evtName = this.keyMap[keyCode];
 			
 			if(typeof evtName != "undefined") {
 				this.eventQueue.addEvent(evtName,0,{"keyCode":keyCode});
@@ -550,7 +564,7 @@ while(i--){
 		
 		
 		eventInQueue: function(eventName) {
-			for(var i = 0, ii = this.eventList.length; i < ii; i++) {
+			for(let i = 0, ii = this.eventList.length; i < ii; i++) {
 				if(this.eventList[i].name === eventName) {
 					return true;
 				}
@@ -560,7 +574,7 @@ while(i--){
 		},
 		
 		removeEvent: function(eventName) {		
-		  for(var i = 0, ii = this.eventList.length; i < ii; i++) {
+		  for(let i = 0, ii = this.eventList.length; i < ii; i++) {
 			if(this.eventList[i].name === eventName) {
 				this.eventList.splice(i,1);
 				this.removeEvent(eventName);
@@ -581,7 +595,7 @@ while(i--){
 		
 		getNextEvent: function() {
 		  if (this.eventList.length > 0) {
-			var evt = this.eventList.shift();
+			let evt = this.eventList.shift();
 			
 			if ((new Date()).getTime() >= evt.delay) {
 			  return evt;
@@ -597,11 +611,11 @@ while(i--){
 		
 		
 		getEvents: function() {
-			var remainingEventList = [];
-			var firingEventList = [];  
-			var time = (new Date()).getTime();
+			let remainingEventList = [];
+			let firingEventList = [];  
+			let time = (new Date()).getTime();
 			
-			for(var i = 0, ii = this.eventList.length; i < ii; i++) {
+			for(let i = 0, ii = this.eventList.length; i < ii; i++) {
 				if (time >= this.eventList[i].delay) {
 					firingEventList.push(this.eventList[i]);
 				} else {
@@ -631,7 +645,7 @@ while(i--){
 		
 		exitIdleState: function() {			
 			if(this.eventList.length > 0 && this.eventTimer == null) {
-				var t = this;
+				let t = this;
 				this.eventTimer = setInterval(function() {
 					t.callBackFunction.apply(t.callBackObject, [t.getEvents()]);									   
 				},10);	
@@ -654,26 +668,27 @@ while(i--){
 			this.layerId = initLayerId;
 		},
 		
-		clear: function() {		
-			this.surface.empty();
+		clear: function() {
+            while (this.surface.lastChild) {
+                this.surface.removeChild(this.surface.lastChild);
+            }
 		},
 			
 		addAssets: function(assetList) {
-			for(var i = 0, ii = assetList.length; i < ii; i++) {
-				var newId = "THUNDER_ASSET_" + Thunder.ID++;
+			for(let i = 0, ii = assetList.length; i < ii; i++) {
+				let newId = "THUNDER_ASSET_" + Thunder.ID++;
 				
-				var newAsset = $('<div>', {
-					"id": newId,
-					"class": "THUNDER_ASSET",
-					"css": {
-						"position": "absolute",
-						"top": assetList[i].getY() + "px",
-						"left": assetList[i].getX() + "px",
-						"width": (typeof assetList[i].width != "undefined") ? assetList[i].width + "px" : "auto",
-						"height": (typeof assetList[i].height != "undefined") ? assetList[i].height + "px" : "auto"
-					}
-				}).appendTo(this.surface);
-				
+				let newAsset = document.createElement('div');
+				newAsset.id = newId;
+				newAsset.setAttribute("data-type", assetList[i].type);
+                newAsset.className = "THUNDER_ASSET";
+                newAsset.style.position = "absolute";
+                newAsset.style.top = assetList[i].getY() + "px";
+                newAsset.style.left = assetList[i].getX() + "px";
+                newAsset.style.width = (typeof assetList[i].width != "undefined") ? assetList[i].width + "px" : "auto";
+                newAsset.style.height = (typeof assetList[i].height != "undefined") ? assetList[i].height + "px" : "auto";
+                this.surface.appendChild(newAsset);
+
 				assetList[i].setContainer(newAsset);
 			}
 		},
@@ -681,8 +696,9 @@ while(i--){
 		setMask: function(top,right,bottom,left) {
 			if(this.container !== null) {
 				if(!isNaN(top) && !isNaN(right) && !isNaN(bottom) && !isNaN(left)) {
-					//layers use overflow instead of clip
-					this.container.css({'width': right,'height': bottom,'overflow':'hidden'});
+					this.container.style.width = right + "px";
+                    this.container.style.height = bottom + "px";
+                    this.container.style.overflow = 'hidden';
 				}
 			}
 		}
@@ -705,7 +721,7 @@ while(i--){
 	
 	Thunder.LayerManager.prototype = {		 
 		layOut: function(assetList, path) {
-			var layerObj = this.get(path).layer; 
+			let layerObj = this.get(path).layer; 
 			
 			if(layerObj != null) {
 				layerObj.clear();
@@ -717,7 +733,7 @@ while(i--){
 		},
 		
 		addToLayOut: function(assetList, path) {
-			var layerObj = this.get(path).layer;  
+			let layerObj = this.get(path).layer;  
 			
 			if(layerObj != null) {
 				layerObj.addAssets(assetList);
@@ -732,10 +748,10 @@ while(i--){
 		},
 		
 		getLayerObjects: function(path) {
-			var r = this.get(path);
+			let r = this.get(path);
 			
 			if(r != null) {
-				var layers = (r.layer == null) ? [] : [r.layer];
+				let layers = (r.layer == null) ? [] : [r.layer];
 				layers = layers.concat(this.getChildLayers(r.sets));
 				return layers;
 			} else {
@@ -744,7 +760,7 @@ while(i--){
 		},		
 		
 		getChildLayers: function(sets) {
-			var layers = [];
+			let layers = [];
 			
 			for(r in sets) {
 				layers.push(sets[r].layer);
@@ -755,32 +771,27 @@ while(i--){
 		},		
 		 
 		addLayer: function(path) {		
-			var layerId = "THUNDER_LAYER_" + Thunder.ID++;
-			var surfaceId = "THUNDER_LAYER_SURFACE_" + Thunder.ID++;
+			let layerId = "THUNDER_LAYER_" + Thunder.ID++;
+			let surfaceId = "THUNDER_LAYER_SURFACE_" + Thunder.ID++;
 			
-			var newSurface = $('<div>', {
-				"id": surfaceId,
-				"class": "THUNDER_LAYER_SURFACE",
-				"css": {
-					"position": "absolute",
-					"top": "0px",
-					"left": "0px"
-				}
-			});
-			
-			var newLayer = $('<div>', {
-				"id": layerId,
-				"class": "THUNDER_LAYER",
-				"name": path,
-				"css": {
-					"position": "absolute",
-					"top": "0px",
-					"left": "0px"
-				}
-			});
-			
-			newSurface.appendTo(newLayer.appendTo(this.container));				
-			this.get(path).layer = new Thunder.Layer(newLayer,newSurface,path,layerId);
+			let newSurface = document.createElement('div');
+            newSurface.id = surfaceId;
+            newSurface.className = "THUNDER_LAYER_SURFACE";
+            newSurface.style.position = "absolute";
+            newSurface.style.top = "0px";
+            newSurface.style.left = "0px";
+
+            let newLayer = document.createElement('div');
+            newLayer.id = layerId;
+			newLayer.setAttribute("data-path", path);
+            newLayer.className = "THUNDER_LAYER";
+            newLayer.style.position = "absolute";
+            newLayer.style.top = "0px";
+            newLayer.style.left = "0px";
+
+            newLayer.appendChild(newSurface);
+            this.container.appendChild(newLayer);
+            this.get(path).layer = new Thunder.Layer(newLayer,newSurface,path,layerId);
 		},
 		
 		get: function(path) {
@@ -788,9 +799,9 @@ while(i--){
 				return this.layers;
 			}
 			
-			var sets = path.replace(/^\/|\/$/g,'').split("/");
-			var x = this.layers.sets;
-			var r = null;
+			let sets = path.replace(/^\/|\/$/g,'').split("/");
+			let x = this.layers.sets;
+			let r = null;
 			
 			for(s in sets) {
 				if(!x.hasOwnProperty(sets[s])) {
@@ -805,14 +816,14 @@ while(i--){
 		},
 		
 		clearSet: function(path) {
-			var layers = this.getLayerObjects(path);
-			for(var i = 0, ii = layers.length; i < ii; i++) {
+			let layers = this.getLayerObjects(path);
+			for(let i = 0, ii = layers.length; i < ii; i++) {
 				layers[i].clear();
 			}
 		},
 		 
 		clearLayer: function(path) {
-			var layerObj = this.get(path);	
+			let layerObj = this.get(path);	
 			
 			if(layerObj != null) {
 				layerObj.layer.clear();
@@ -820,29 +831,29 @@ while(i--){
 		},
 		 
 		clearAll: function() {
-			var layers = this.getChildLayers(this.layers.sets);
-			for(var i = 0, ii = layers.length; i < ii; i++) {
+			let layers = this.getChildLayers(this.layers.sets);
+			for(let i = 0, ii = layers.length; i < ii; i++) {
 				layers[i].clear();
 			}
 		},
 		 
 		setLayerSetPosition: function(path, newPosition) {
-			var layers = this.getLayerObjects(path);
-			for(var i = 0, ii = layers.length; i < ii; i++) {
+			let layers = this.getLayerObjects(path);
+			for(let i = 0, ii = layers.length; i < ii; i++) {
 				layers[i].setPosition(newPosition.x,newPosition.y);
 			}
 		},
 			
 		moveLayerSet: function(path, destinationPoint) {
-			var layers = this.getLayerObjects(path);
-			for(var i = 0, ii = layers.length; i < ii; i++) {
-				var newPosition = layers[i].getPosition().addPoint(destinationPoint)
+			let layers = this.getLayerObjects(path);
+			for(let i = 0, ii = layers.length; i < ii; i++) {
+				let newPosition = layers[i].getPosition().addPoint(destinationPoint)
 				layers[i].move(newPosition.x,newPosition.y);
 			}
 		},
 		
 		setVisible: function(path, visible) {
-			var layerObj = this.get(path).layer;	
+			let layerObj = this.get(path).layer;	
 			
 			if(layerObj != null) {
 				layerObj.setVisible(visible);
@@ -850,7 +861,7 @@ while(i--){
 		},
 		 
 		setLayerMask: function(path,top,right,bottom,left) {
-			var layerObj = this.get(path).layer;	
+			let layerObj = this.get(path).layer;	
 			
 			if(layerObj != null) {
 				layerObj.setMask(top,right,bottom,left);
@@ -858,18 +869,18 @@ while(i--){
 		},
 		
 		setContainer: function(newContainer) {
-			this.container.children().appendTo(newContainer);
+			this.container.children().appendChild(newContainer);
 			this.container = newContainer;
 		},
 		
 		moveToLayer: function(path,container,toRear) {
-			var layerObj = this.get(path).layer;
+			let layerObj = this.get(path).layer;
 			
 			if(layerObj != null) {
 				if(toRear) {
-					container.appendTo(layerObj.surface).insertBefore(layerObj.surface.find(".THUNDER_ASSET").first());
+					layerObj.surface.insertBefore(container, layerObj.surface.querySelector(".THUNDER_ASSET"));
 				} else {
-					container.appendTo(layerObj.surface);
+					layerObj.surface.appendChild(container);
 				}
 				
 				return true;
@@ -891,19 +902,21 @@ while(i--){
 	Thunder.Cookie.prototype = {
 		create: function(name,value,days) {
 			if (days) {
-				var date = new Date();
+				let date = new Date();
 				date.setTime(date.getTime()+(days*24*60*60*1000));
-				var expires = "; expires="+date.toGMTString();
-			}
-			else var expires = "";
+				let expires = "; expires="+date.toGMTString();
+			} else {
+                let expires = "";
+            }
+
 			document.cookie = name+"="+value+expires+"; path=/";
 		},
 		
 		read: function(name) {
-			var nameEQ = name + "=";
-			var ca = document.cookie.split(';');
-			for(var i=0, ii = ca.length; i < ii; i++) {
-				var c = ca[i];
+			let nameEQ = name + "=";
+			let ca = document.cookie.split(';');
+			for(let i=0, ii = ca.length; i < ii; i++) {
+				let c = ca[i];
 				while (c.charAt(0)===' ') c = c.substring(1,c.length);
 				if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length,c.length);
 			}
@@ -947,10 +960,7 @@ while(i--){
 		},
 	
 		equals: function(p) {
-			if(this.x === p.x && this.y === p.y)
-				return true;
-		
-			return false;
+			return this.x === p.x && this.y === p.y;
 		},
 		
 		getDistance: function(p2) {
@@ -958,7 +968,7 @@ while(i--){
 		},
 		
 		getAngle: function(p2) {
-			var a = 270 + (Math.atan2(this.y - p2.y, this.x - p2.x) * (180 / Math.PI));
+			let a = 270 + (Math.atan2(this.y - p2.y, this.x - p2.x) * (180 / Math.PI));
 			
 			if(a > 360) {
 				return a - 360;	
@@ -1002,7 +1012,7 @@ while(i--){
 	
 		attach: function(html) {
 			if(this.container !== null) {
-				this.container.append(html);
+				this.container.innerHTML = html;
 			}
 		},
 		
@@ -1072,7 +1082,7 @@ while(i--){
 	
 	Thunder.AssetManager.prototype = {
 		addAsset: function(initGroup, initType, initSrc, initTag, initX, initY, initWidth, initHeight, initParam) {
-			var asset = new Thunder.Asset(initGroup, initType, initSrc, initTag);
+			let asset = new Thunder.Asset(initGroup, initType, initSrc, initTag);
 			
 			if(typeof initX != "undefined" && typeof initY != "undefined") {
 				asset.setPosition(initX, initY);
@@ -1082,13 +1092,13 @@ while(i--){
 			asset.setParam(initParam);
 			
 			// add groups to assetList if needed
-			for(var g = 0, gg = asset.groupArray.length; g < gg; g++) {
+			for(let g = 0, gg = asset.groupArray.length; g < gg; g++) {
 				if(typeof this.assetList[asset.groupArray[g]] == "undefined") {
 					this.assetList[asset.groupArray[g]] = {};
 				}
 				
 				// add types to group
-				for(var t = 0, tt = asset.typeArray.length; t < tt; t++) {
+				for(let t = 0, tt = asset.typeArray.length; t < tt; t++) {
 					if(typeof this.assetList[asset.groupArray[g]][asset.typeArray[t]] == "undefined") {
 						this.assetList[asset.groupArray[g]][asset.typeArray[t]] = [];
 					}
@@ -1102,8 +1112,8 @@ while(i--){
 		},		
 		
 		removeAssets: function(group, type) {
-			var groupList = [];
-			var typeList = [];
+			let groupList = [];
+			let typeList = [];
 			
 			if(typeof group != "undefined") {
 				groupList = group.split("|");
@@ -1113,13 +1123,13 @@ while(i--){
 				typeList = type.split("|");
 			}
 			
-			for(var g = 0, gg = groupList.length; g < gg; g++) {
+			for(let g = 0, gg = groupList.length; g < gg; g++) {
 				if(typeof this.assetList[groupList[g]] != "undefined") {
 					if(typeList.length == 0) {
 						//delete all assets for this group
-						for(var t in this.assetList[groupList[g]]) {
+						for(let t in this.assetList[groupList[g]]) {
 							if(typeof t != "undefined") {
-								for(var i = 0; i < this.assetList[groupList[g]][t].length; i++) {
+								for(let i = 0; i < this.assetList[groupList[g]][t].length; i++) {
 									delete this.assetTagList[this.assetList[groupList[g]][t][i].tag];
 								}
 							}
@@ -1127,11 +1137,11 @@ while(i--){
 						
 						delete this.assetList[groupList[g]];
 					} else {
-						for(var t = 0, tt = typeList.length; t < tt; t++) {					
-							var assets = this.assetList[groupList[g]][typeList[t]];
+						for(let t = 0, tt = typeList.length; t < tt; t++) {					
+							let assets = this.assetList[groupList[g]][typeList[t]];
 							
 							if(typeof assets != "undefined") {
-								for(var i = 0, ii = assets.length; i < ii; i++) {
+								for(let i = 0, ii = assets.length; i < ii; i++) {
 									delete this.assetTagList[assets[i].tag];
 								}
 							}
@@ -1144,17 +1154,17 @@ while(i--){
 		},		
 			
 		removeAsset: function(tag) {				
-			var asset = this.assetTagList[tag];
-			var result = 0;
+			let asset = this.assetTagList[tag];
+			let result = 0;
 			
 			if(typeof asset != "undefined") {
-				var groups = asset.getGroupArray();
+				let groups = asset.getGroupArray();
 				
-				for(var g = 0, gg = groups.length; g < gg; g++) {
-					for(var t in this.assetList[groups[g]]) {
-						var assets = this.assetList[groups[g]][t];
+				for(let g = 0, gg = groups.length; g < gg; g++) {
+					for(let t in this.assetList[groups[g]]) {
+						let assets = this.assetList[groups[g]][t];
 						
-						for(var i = 0; i < assets.length; i++) {  
+						for(let i = 0; i < assets.length; i++) {  
 							if(assets[i].tag === tag) {
 								assets.splice(i--,1);
 							}
@@ -1170,9 +1180,9 @@ while(i--){
 		},
 		
 		getAssets: function(group, type) {
-			var matchList = [];
-			var groupList = [];
-			var typeList = [];
+			let matchList = [];
+			let groupList = [];
+			let typeList = [];
 			
 			if(typeof group != "undefined") {
 				groupList = group.split("|");
@@ -1182,18 +1192,18 @@ while(i--){
 				typeList = type.split("|");
 			}
 			
-			for(var g = 0, gg = groupList.length; g < gg; g++) {
+			for(let g = 0, gg = groupList.length; g < gg; g++) {
 				if(typeof this.assetList[groupList[g]] != "undefined") {
 					if(typeList.length == 0) {
 						//get all assets for this group					
-						for(var t in this.assetList[groupList[g]]) {
+						for(let t in this.assetList[groupList[g]]) {
 							if(typeof t != "undefined") {
 								matchList = matchList.concat(this.assetList[groupList[g]][t]);
 							}
 						}					
 					} else {
-						for(var t = 0, tt = typeList.length; t < tt; t++) {					
-							var assets = this.assetList[groupList[g]][typeList[t]];
+						for(let t = 0, tt = typeList.length; t < tt; t++) {					
+							let assets = this.assetList[groupList[g]][typeList[t]];
 							
 							if(typeof assets != "undefined") {
 								matchList = matchList.concat(assets);
@@ -1207,7 +1217,7 @@ while(i--){
 		},	
 		
 		getAsset: function(tag) {
-			var k = this.assetTagList[tag];
+			let k = this.assetTagList[tag];
 				
 			if(typeof k != "undefined") {
 				return k;
@@ -1217,7 +1227,7 @@ while(i--){
 		},		
 		
 		stack: function(_assetList, direction, x, y, offSet) {		
-			for(var i = 0, ii = _assetList.length; i < ii; i++) {
+			for(let i = 0, ii = _assetList.length; i < ii; i++) {
 				_assetList[i].setX(x);
 				_assetList[i].setY(y);
 			
@@ -1234,9 +1244,9 @@ while(i--){
 		},
 		
 		getStackedSize: function(_assetList, direction, offSet) {	
-			var d = 0;
+			let d = 0;
 			
-			for(var i = 0, ii = _assetList.length; i < ii; i++) {			
+			for(let i = 0, ii = _assetList.length; i < ii; i++) {			
 				if (direction === Thunder.VERTICAL) {
 					d += _assetList[i].height + offSet;
 				} else if (direction === Thunder.HORIZONTAL) {
@@ -1247,73 +1257,4 @@ while(i--){
 			return d;
 		}
 	};
-})();
-
-/*
- *    Thunder XMLDataManager
- *
- */
-
-(function(){		
-	Thunder.XMLDataManager = Thunder.Object.extend({	
-		init: function(initReadyEvent) {
-			this._super();
-			this.xml = null;
-			this.data = [];
-			
-			if(initReadyEvent == null) {
-				this.readyEvent = "XML_DATA_READY";
-			} else {
-				this.readyEvent = initReadyEvent;	
-			}
-		},
-		
-		load: function(src) {
-			var t = this;
-			
-			$.get(src, function(data) {				
-				t.xml = data;
-				t.process(t.xml,t.data);
-				t.broadcastEvent(t.readyEvent);
-			});
-		},
-		
-		parse: function(str) {			
-			try {
-				this.xml = $.parseXML(str);
-			} catch(e) {
-				this.xml = null;	
-			}
-		},
-		
-		process: function(node, data) {	
-			for(var i = 0, ii = node.childNodes.length; i < ii; i++) {	
-				switch(node.childNodes[i].nodeName) {					
-					default:
-						if (node.childNodes[i].nodeType === 3 || node.childNodes[i].nodeType == 4) { //TEXT or CDATA
-							var v = $.trim(node.childNodes[i].nodeValue);
-							
-							if(v.length > 0) {
-								data["TEXT"] = v;
-							}
-						} else if (node.childNodes[i].nodeType == 1) { //ELEMENT
-							if(data[node.childNodes[i].nodeName] == null) {
-								data[node.childNodes[i].nodeName] = [];
-							}
-							
-							data[node.childNodes[i].nodeName].push([]);
-							var iii = data[node.childNodes[i].nodeName].length - 1;
-							
-							if(node.childNodes[i].hasChildNodes()) {
-								this.process(node.childNodes[i],data[node.childNodes[i].nodeName][iii]);
-							}
-							
-							for(var a = 0, aa = node.childNodes[i].attributes.length; a < aa; a++) {
-								data[node.childNodes[i].nodeName][iii][node.childNodes[i].attributes[a].name] = node.childNodes[i].attributes[a].value;
-							}
-						}
-				}
-			}		
-		}
-	})
 })();

@@ -1,13 +1,12 @@
 # thunder
-A framework for applications built on top of jQuery.
+A framework for single page applications.
 
 ## Getting started
 
-Thunder requires jquery (any version).
+Add Thunder to your page.
 
 ```html
-<script src="jquery-3.0.0.min.js"></script>
-<script src="thunder-1.1.0.js"></script>
+<script src="thunder-1.2.0.min.js"></script>
 ```
 
 ## Hello World!
@@ -18,7 +17,7 @@ Define a single top level element for the application.
 <html>
   <head>
     <title>Thunder: Hello World!</title>
-    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">  
+    <meta name="viewport" content="width=device-width; initial-scale=1.0, maximum-scale=1.0">  
   </head>
   <body style="margin-top:0px; margin-left:0px;">
   	<div style="position:relative;">
@@ -38,12 +37,7 @@ Thunder components have the following flow:
 ```js
 Thunder.DEBUG = true;
 
-$(document).ready(function () {
-  var App = new Application($("#root"));
-});
-
-
-var Application = Thunder.Component.extend({			
+let Application = Thunder.Component.extend({			
 	init: function(initRootElement) {
 		this._super(initRootElement);
 			
@@ -65,6 +59,8 @@ var Application = Thunder.Component.extend({
 		this.layerManager.layOut(this.assetManager.getAssets("gui","html"),"/BG");
 	}
 });
+
+let App = new Application(document.getElementById("root"));
 ```
 
 ## Assets

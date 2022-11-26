@@ -39,8 +39,8 @@
 			
 			//Initialize window listeners
 			var t = this;
-			$(document).mouseup(function(event) { if(t.dragTab) {t.eventQueue.addEvent("WINDOW_MOUSEUP",0,t,event); return false; } });
-			$(document).mousemove(function(event) { if(t.dragTab) {t.eventQueue.addEvent("WINDOW_MOUSEMOVE",0,t,event); return false; } });
+			document.addEventListener("mouseup",function(event) { if(t.dragTab) {t.eventQueue.addEvent("WINDOW_MOUSEUP",0,t,event); return false; } });
+			document.addEventListener("mousemove",function(event) { if(t.dragTab) {t.eventQueue.addEvent("WINDOW_MOUSEMOVE",0,t,event); return false; } });
 			
 			//start
 			this.drawMainInterface();
@@ -148,7 +148,7 @@
 		
 			this.addCustomizer("btn", function(asset) {
 				asset.attach("<img src='" + asset.src + "' style='cursor:hand;cursor:pointer'/>");
-				var em = new Thunder.EventMap(asset.container.children(),asset,t.eventQueue);
+				var em = new Thunder.EventMap(asset.container.firstChild,asset,t.eventQueue);
 				
 				switch (asset.tag) {
 					case "DOWN":
@@ -174,11 +174,13 @@
 						if(t.horizontal) {
 							asset.width = t.width - (upAsset.getWidth() + downAsset.getWidth());
 							asset.setPosition(upAsset.getWidth(),0);
-							asset.container.children().css({width:asset.getWidth(),height:t.height});
+							asset.container.firstChild.style.width = asset.getWidth();
+							asset.container.firstChild.style.height = t.height;
 						} else {
 							asset.height = t.height - (upAsset.getHeight() + downAsset.getHeight());
 							asset.setPosition(0,upAsset.getHeight());
-							asset.container.children().css({width:t.width,height:asset.getHeight()});
+							asset.container.firstChild.style.width = t.width;
+							asset.container.firstChild.style.height = asset.getHeight();
 						}
 						break;							
 				}
