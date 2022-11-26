@@ -98,7 +98,7 @@ Customizers are applied to assets after they have been added to layer.
 
 ```js
 this.addCustomizer("img", function(asset) {
-	asset.container.html("<img src='" + asset.src + "'>");
+	asset.container.innerHTML = "<img src='" + asset.src + "'>";
 });
 ```
 
@@ -106,7 +106,7 @@ Use customizers to map events to the component's event queue:
 
 ```js
 this.addCustomizer("btn", function(asset) {
-	asset.container.html("<img class='empty' src='" + asset.src + "' style='cursor:hand;cursor:pointer'>");
+	asset.container.innerHTML = "<img class='empty' src='" + asset.src + "' style='cursor:hand;cursor:pointer'>";
 	asset.mapEvents(t.eventQueue);
 });
 ```
