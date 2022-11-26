@@ -17,7 +17,7 @@ Define a single top level element for the application.
 <html>
   <head>
     <title>Thunder: Hello World!</title>
-    <meta name="viewport" content="width=device-width; initial-scale=1.0, maximum-scale=1.0">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">  
   </head>
   <body style="margin-top:0px; margin-left:0px;">
   	<div style="position:relative;">
@@ -116,11 +116,13 @@ this.addCustomizer("btn", function(asset) {
 Use responders to define event handlers. 
 
 ```js
-this.addResponder("MOUSEUP", function(event) {	
+this.addResponder("MOUSEUP", function(event) {
+	t.trace("APP EVENT: " + event.name);	
+	
 	switch(event.owner.type) {
 		case "btn":
 			event.owner.unMapEvents();
-			event.owner.container.html("<img src='x.png'>");
+			event.owner.container.innerHTML = "<img src='x.png'>";
 			t.gameBoard[event.owner.param] = t.PLAYER;
 			
 			if(t.handleVictory(t.checkVictory())) {
