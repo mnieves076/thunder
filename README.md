@@ -52,7 +52,7 @@ let Application = Thunder.Component.extend({
 	},
 	
 	drawMainInterface: function() {
-		this.addCustomizer("html",function(asset) {
+		this.addCustomizer("html", (asset) => {
 			asset.container.innerHTML = "<div>Hello World!</div>";
 		});
 		
@@ -116,19 +116,19 @@ this.addCustomizer("btn", function(asset) {
 Use responders to define event handlers. 
 
 ```js
-this.addResponder("MOUSEUP", function(event) {
-	t.trace("APP EVENT: " + event.name);	
+this.addResponder("MOUSEUP", (event) => {
+	this.trace("APP EVENT: " + event.name);	
 	
 	switch(event.owner.type) {
 		case "btn":
 			event.owner.unMapEvents();
 			event.owner.container.innerHTML = "<img src='x.png'>";
-			t.gameBoard[event.owner.param] = t.PLAYER;
+			this.gameBoard[event.owner.param] = this.PLAYER;
 			
-			if(t.handleVictory(t.checkVictory())) {
-				t.reset(); 
+			if(this.handleVictory(this.checkVictory())) {
+				this.reset(); 
 			} else {
-				t.handleComputerMove();
+				this.handleComputerMove();
 			}
 			break;
 	}

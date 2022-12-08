@@ -56,54 +56,52 @@ let Application = Thunder.Component.extend({
 	},
 	
 	drawMainInterface: function() {
-		var t = this;
-		
-		this.addCustomizer("img", function(asset) {
+		this.addCustomizer("img", (asset) => {
 			asset.container.innerHTML = "<img src='" + asset.src + "'>";
 		});
 		
-		this.addCustomizer("btn", function(asset) {
+		this.addCustomizer("btn", (asset) => {
 			asset.container.innerHTML = "<img class='empty' src='" + asset.src + "' style='cursor:hand;cursor:pointer'>";
-			asset.mapEvents(t.eventQueue);
+			asset.mapEvents(this.eventQueue);
 		});
 		
-		this.addResponder("MOUSEUP", function(event) {
-			t.trace("APP EVENT: " + event.name);	
+		this.addResponder("MOUSEUP", (event) => {
+			this.trace("APP EVENT: " + event.name);	
 			
 			switch(event.owner.type) {
 				case "btn":
 					event.owner.unMapEvents();
 					event.owner.container.innerHTML = "<img src='x.png'>";
-					t.gameBoard[event.owner.param] = t.PLAYER;
+					this.gameBoard[event.owner.param] = this.PLAYER;
 					
-					if(t.handleVictory(t.checkVictory())) {
-						t.reset(); 
+					if(this.handleVictory(this.checkVictory())) {
+						this.reset(); 
 					} else {
-						t.handleComputerMove();
+						this.handleComputerMove();
 					}
 					break;
 			}
 		});
 		
-		this.addResponder("KEYUP", function(event) {
-			t.trace("APP EVENT: " + event.name);	
+		this.addResponder("KEYUP", (event) => {
+			this.trace("APP EVENT: " + event.name);	
 			
-			var p = parseInt(String.fromCharCode(event.owner.keyCode));
+			let p = parseInt(String.fromCharCode(event.owner.keyCode));
 			
 			if(isNaN(p) || p > 8) {
-				t.trace(p + " is not valid.");
+				this.trace(p + " is not valid.");
 				return;
 			}
 			
-			t.gameBoard[p] = t.PLAYER;
+			this.gameBoard[p] = t.PLAYER;
 			
-			var asset = t.assetManager.getAsset("BTN_" + p);
+			let asset = t.assetManager.getAsset("BTN_" + p);
 			asset.container.innerHTML = "<img src='x.png'>";
 			
-			if(t.handleVictory(t.checkVictory())) {
-				t.reset(); 
+			if(this.handleVictory(this.checkVictory())) {
+				this.reset(); 
 			} else {
-				t.handleComputerMove();
+				this.handleComputerMove();
 			}
 		});
 		
@@ -114,14 +112,14 @@ let Application = Thunder.Component.extend({
 	reset: function() {
 		this.gameBoard = [0,0,0,0,0,0,0,0,0];
 		this.layerManager.layOut(this.assetManager.getAssets("gui","btn"),"/BOARD");
-		var firstPlayer = Math.ceil(Math.random() * 2);
+		let firstPlayer = Math.ceil(Math.random() * 2);
 		
 		if(firstPlayer == this.COMPUTER)
 			this.handleComputerMove();
 	},
 	
 	handleComputerMove: function() {
-		var selectedPosition = null;
+		let selectedPosition = null;
 	
 		//priority 1: get 3 in a row
 		if(selectedPosition == null)
@@ -137,9 +135,9 @@ let Application = Thunder.Component.extend({
 		
 		//priority 4: get 1 in empty position
 		if(selectedPosition == null) {
-			var emptyPositions = [];
+			let emptyPositions = [];
 			
-			for(var i = 0; i < this.gameBoard.length; i++) {
+			for(let i = 0; i < this.gameBoard.length; i++) {
 				if(this.gameBoard[i] == 0)
 					emptyPositions.push(i);
 			}
@@ -147,7 +145,7 @@ let Application = Thunder.Component.extend({
 			selectedPosition = emptyPositions[Math.floor(Math.random() * emptyPositions.length)];
 		}
 		
-		var asset = this.assetManager.getAsset("BTN_" + selectedPosition);
+		let asset = this.assetManager.getAsset("BTN_" + selectedPosition);
 		asset.container.innerHTML = "<img src='o.png'/>";
 		asset.unMapEvents();
 		this.gameBoard[selectedPosition] = this.COMPUTER;
@@ -158,13 +156,13 @@ let Application = Thunder.Component.extend({
 	},	
 	
 	getBestPlay: function(inRowCount,whichPlayer) {
-		var selectedPosition = null;
+		let selectedPosition = null;
 			
-		for(var i = 0; i < this.winningCombos.length; i++) {
-			var comboCount = 0;
-			var candidatePosition = null;
+		for(let i = 0; i < this.winningCombos.length; i++) {
+			let comboCount = 0;
+			let candidatePosition = null;
 			
-			for(var ii = 0; ii < this.winningCombos[i].length; ii++) {
+			for(let ii = 0; ii < this.winningCombos[i].length; ii++) {
 				if(this.gameBoard[this.winningCombos[i][ii]] == whichPlayer) {
 					comboCount++;
 				} else if(this.gameBoard[this.winningCombos[i][ii]] == 0) {
@@ -183,17 +181,17 @@ let Application = Thunder.Component.extend({
 	},	
 	
 	checkVictory: function() {		
-		var playerCount;
-		var computerCount;
-		var isDraw;
+		let playerCount;
+		let computerCount;
+		let isDraw;
 		
 		isDraw = true;
 		
-		for(var i = 0; i < this.winningCombos.length; i++) {
+		for(let i = 0; i < this.winningCombos.length; i++) {
 			playerCount = 0;
 			computerCount = 0;
 			
-			for(var ii = 0; ii < this.winningCombos[i].length; ii++) {
+			for(let ii = 0; ii < this.winningCombos[i].length; ii++) {
 				if(this.gameBoard[this.winningCombos[i][ii]] == this.PLAYER) {
 					playerCount++;
 				} else if(this.gameBoard[this.winningCombos[i][ii]] == this.COMPUTER) { 
