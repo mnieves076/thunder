@@ -97,7 +97,7 @@ this.layerManager.layOut(this.assetManager.getAssets("gui","btn"),"/BOARD");
 Customizers are applied to assets after they have been added to layer.
 
 ```js
-this.addCustomizer("img", function(asset) {
+this.addCustomizer("img", (asset) => {
 	asset.container.innerHTML = "<img src='" + asset.src + "'>";
 });
 ```
@@ -105,7 +105,7 @@ this.addCustomizer("img", function(asset) {
 Use customizers to map events to the component's event queue:
 
 ```js
-this.addCustomizer("btn", function(asset) {
+this.addCustomizer("btn", (asset) => {
 	asset.container.innerHTML = "<img class='empty' src='" + asset.src + "' style='cursor:hand;cursor:pointer'>";
 	asset.mapEvents(t.eventQueue);
 });
