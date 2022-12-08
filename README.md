@@ -107,7 +107,7 @@ Use customizers to map events to the component's event queue:
 ```js
 this.addCustomizer("btn", (asset) => {
 	asset.container.innerHTML = "<img class='empty' src='" + asset.src + "' style='cursor:hand;cursor:pointer'>";
-	asset.mapEvents(t.eventQueue);
+	asset.mapEvents(this.eventQueue);
 });
 ```
 
