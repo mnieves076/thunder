@@ -1075,12 +1075,26 @@ while(i--){
 */
 
 (function(){		
-	Thunder.AssetManager = function(initGroup, initType, initSrc, initTag) {
+	Thunder.AssetManager = function() {
 		this.assetList = {};
 		this.assetTagList = [];
 	};
 	
 	Thunder.AssetManager.prototype = {
+		loadAssets: function(src, cbFunc) {
+			fetch(src)
+				.then(resp => {
+					resp.json().then(data => {
+						data.forEach(asset => {
+							this.addAsset(asset.group, asset.type, asset.src, asset.tag, asset.X, asset.Y, asset.width, asset.height, asset.param);
+						});
+
+						cbFunc();
+					})
+				})
+				.catch(err => console.log(err));
+		},
+
 		addAsset: function(initGroup, initType, initSrc, initTag, initX, initY, initWidth, initHeight, initParam) {
 			let asset = new Thunder.Asset(initGroup, initType, initSrc, initTag);
 			

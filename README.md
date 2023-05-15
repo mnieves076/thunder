@@ -71,6 +71,14 @@ Assets are best defined as anything managed by the given component.
 this.assetManager.addAsset("gui","img","clouds.jpg","BG",0,0,320,416);
 ```
 
+You can also add assets from json.
+
+```js
+this.assetManager.loadAssets("assets.json", () => {
+	//Initialize layers, etc...
+});
+```
+
 Once added to a component's asset manager object, they can be quickly retrieved by group, type or tag.
 
 ```js

@@ -1,0 +1,111 @@
+[
+{
+    "group": "gui", 
+    "type": "btn", 
+    "src": "empty.png", 
+    "tag": "BTN_0", 
+    "X": 8, 
+    "Y": 8, 
+    "width": 96, 
+    "height": 96, 
+    "param": 0
+},
+{
+    "group": "gui", 
+    "type": "btn", 
+    "src": "empty.png", 
+    "tag": "BTN_1", 
+    "X": 112, 
+    "Y": 8, 
+    "width": 96, 
+    "height": 96, 
+    "param": 1
+},
+{
+    "group": "gui", 
+    "type": "btn", 
+    "src": "empty.png", 
+    "tag": "BTN_2", 
+    "X": 216, 
+    "Y": 8, 
+    "width": 96, 
+    "height": 96, 
+    "param": 2
+},
+{
+    "group": "gui", 
+    "type": "btn", 
+    "src": "empty.png", 
+    "tag": "BTN_3", 
+    "X": 8, 
+    "Y": 112, 
+    "width": 96, 
+    "height": 96, 
+    "param": 3
+},
+{
+    "group": "gui", 
+    "type": "btn", 
+    "src": "empty.png", 
+    "tag": "BTN_4", 
+    "X": 112, 
+    "Y": 112, 
+    "width": 96, 
+    "height": 96, 
+    "param": 4
+},
+{
+    "group": "gui", 
+    "type": "btn", 
+    "src": "empty.png", 
+    "tag": "BTN_5", 
+    "X": 216, 
+    "Y": 112, 
+    "width": 96, 
+    "height": 96, 
+    "param": 5
+},
+{
+    "group": "gui", 
+    "type": "btn", 
+    "src": "empty.png", 
+    "tag": "BTN_6", 
+    "X": 8, 
+    "Y": 216, 
+    "width": 96, 
+    "height": 96, 
+    "param": 6
+},
+{
+    "group": "gui", 
+    "type": "btn", 
+    "src": "empty.png", 
+    "tag": "BTN_7", 
+    "X": 112, 
+    "Y": 216, 
+    "width": 96, 
+    "height": 96, 
+    "param": 7
+},
+{
+    "group": "gui", 
+    "type": "btn", 
+    "src": "empty.png", 
+    "tag": "BTN_8", 
+    "X": 216, 
+    "Y": 216, 
+    "width": 96, 
+    "height": 96, 
+    "param": 8
+},
+{
+    "group": "gui", 
+    "type": "img", 
+    "src": "clouds.jpg", 
+    "tag": "BG", 
+    "X": 0, 
+    "Y": 0, 
+    "width": 320, 
+    "height": 416
+}
+]

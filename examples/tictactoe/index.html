@@ -31,28 +31,17 @@ let Application = Thunder.Component.extend({
 		this.COMPUTER = 2;
 		
 		//Initialize assets
-		this.assetManager.addAsset("gui","img","clouds.jpg","BG",0,0,320,416);
-		this.assetManager.addAsset("gui","btn","empty.png","BTN_0",8,8,96,96,0);
-		this.assetManager.addAsset("gui","btn","empty.png","BTN_1",112,8,96,96,1);
-		this.assetManager.addAsset("gui","btn","empty.png","BTN_2",216,8,96,96,2);
-		
-		this.assetManager.addAsset("gui","btn","empty.png","BTN_3",8,112,96,96,3);
-		this.assetManager.addAsset("gui","btn","empty.png","BTN_4",112,112,96,96,4);
-		this.assetManager.addAsset("gui","btn","empty.png","BTN_5",216,112,96,96,5);
-		
-		this.assetManager.addAsset("gui","btn","empty.png","BTN_6",8,216,96,96,6);
-		this.assetManager.addAsset("gui","btn","empty.png","BTN_7",112,216,96,96,7);
-		this.assetManager.addAsset("gui","btn","empty.png","BTN_8",216,216,96,96,8);
-		
-		//Initialize layers
-		this.layerManager.addLayer("/BG");
-		this.layerManager.addLayer("/BOARD");
+		this.assetManager.loadAssets("assets.json", () => {
+			//Initialize layers
+			this.layerManager.addLayer("/BG");
+			this.layerManager.addLayer("/BOARD");
+					
+			//Map key controls
+			this.keyEventMap = new Thunder.KeyEventMap(document,this.eventQueue);
 				
-		//Map key controls
-		this.keyEventMap = new Thunder.KeyEventMap(document,this.eventQueue);
-			
-		//start
-		this.drawMainInterface();
+			//start
+			this.drawMainInterface();
+		});
 	},
 	
 	drawMainInterface: function() {
